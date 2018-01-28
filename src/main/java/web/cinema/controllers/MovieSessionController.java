@@ -20,7 +20,7 @@ import web.cinema.service.MovieService;
 import web.cinema.service.MovieSessionService;
 
 @RestController
-@RequestMapping("/moviesessions")
+@RequestMapping("/movie-sessions")
 public class MovieSessionController {
 
     private final MovieSessionService movieSessionService;
