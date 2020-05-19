@@ -10,7 +10,7 @@ import web.cinema.service.MovieService;
 @Service
 public class MovieServiceImpl implements MovieService {
     @Inject
-    MovieDao moviedao;
+    private MovieDao moviedao;
 
     @Override
     public Movie add(Movie movie) {
