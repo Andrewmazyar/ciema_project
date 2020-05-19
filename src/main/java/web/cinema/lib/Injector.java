@@ -1,4 +1,4 @@
-package cinema.lib;
+package web.cinema.lib;
 
 import java.io.File;
 import java.io.IOException;

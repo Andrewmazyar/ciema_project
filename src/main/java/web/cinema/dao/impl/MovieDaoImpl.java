@@ -1,14 +1,14 @@
-package cinema.dao.impl;
+package web.cinema.dao.impl;
 
-import cinema.dao.MovieDao;
-import cinema.lib.Dao;
-import cinema.model.Movie;
-import cinema.util.HibernateUtil;
 import java.util.List;
 import javax.persistence.criteria.CriteriaQuery;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import web.cinema.dao.MovieDao;
+import web.cinema.lib.Dao;
+import web.cinema.model.Movie;
+import web.cinema.util.HibernateUtil;
 
 @Dao
 public class MovieDaoImpl implements MovieDao {
