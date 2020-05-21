@@ -1,6 +1,6 @@
 package web.cinema.dao.impl;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.criteria.CriteriaQuery;
 import org.apache.log4j.Logger;
@@ -14,7 +14,7 @@ import web.cinema.util.HibernateUtil;
 
 @Dao
 public class MovieSessionDaoImpl implements MovieSessionDao {
-    private static final Logger LOGGER = Logger.getLogger(MovieDaoImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(MovieSessionDaoImpl.class);
 
     @Override
     public MovieSession add(MovieSession movieSession) {
@@ -40,18 +40,21 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
                     .getCriteriaBuilder().createQuery(MovieSession.class);
             criteriaQuery.from(MovieSession.class);
             return session.createQuery(criteriaQuery).getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Can`t get All movie sessions", e);
         }
     }
 
     @Override
-    public List<MovieSession> findAvailableSessions(Long movieId, LocalDateTime date) {
+    public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             Query query = session
-                    .createQuery("from MovieSession where showTime = :time AND movie.id = :id");
-            query.setParameter("time", date);
+                    .createQuery("from MovieSession where movie.movieId = :id "
+                            + "AND showTime > :time");
             query.setParameter("id", movieId);
+            query.setParameter("time", date.atStartOfDay());
             List list = query.list();
             transaction.commit();
             return list;
@@ -59,7 +62,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Cant insert movie session entity", e);
+            throw new RuntimeException("Cant get movie session by the date or movie id", e);
         }
     }
 }

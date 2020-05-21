@@ -12,7 +12,7 @@ import web.cinema.util.HibernateUtil;
 
 @Dao
 public class CinemaHallDaoImpl implements CinemaHallDao {
-    private static final Logger LOGGER = Logger.getLogger(MovieDaoImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(CinemaHallDaoImpl.class);
 
     @Override
     public CinemaHall add(CinemaHall cinemaHall) {
@@ -27,7 +27,7 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can`t insert Movie entity", e);
+            throw new RuntimeException("Can`t insert cinema hall entity", e);
         }
     }
 
@@ -38,6 +38,8 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
                     .getCriteriaBuilder().createQuery(CinemaHall.class);
             criteriaQuery.from(CinemaHall.class);
             return session.createQuery(criteriaQuery).getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Can`t get All cinema hall ", e);
         }
     }
 }

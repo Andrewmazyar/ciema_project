@@ -1,5 +1,6 @@
 package web.cinema;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import web.cinema.lib.Injector;
@@ -38,6 +39,6 @@ public class Main {
                 = (MovieSessionService) INJECTOR.getInstance((MovieSessionService.class));
         movieSessionService.add(movieSession);
         movieSessionService.findAvailableSessions(movie.getMovieId(),
-                LocalDateTime.parse("2014-04-08 12:30", formatter)).forEach(System.out::println);
+                LocalDate.parse("2014-04-08")).forEach(System.out::println);
     }
 }

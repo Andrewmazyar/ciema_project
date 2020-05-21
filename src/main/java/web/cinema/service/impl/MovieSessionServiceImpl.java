@@ -1,6 +1,6 @@
 package web.cinema.service.impl;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import web.cinema.dao.MovieSessionDao;
 import web.cinema.lib.Inject;
@@ -19,7 +19,7 @@ public class MovieSessionServiceImpl implements MovieSessionService {
     }
 
     @Override
-    public List<MovieSession> findAvailableSessions(Long movieId, LocalDateTime date) {
+    public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
         return movieSessionDao.findAvailableSessions(movieId, date);
     }
 }
