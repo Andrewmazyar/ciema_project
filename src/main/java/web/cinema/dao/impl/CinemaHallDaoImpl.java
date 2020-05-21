@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import web.cinema.dao.CinemaHallDao;
+import web.cinema.exception.DataProcessingException;
 import web.cinema.lib.Dao;
 import web.cinema.model.CinemaHall;
 import web.cinema.util.HibernateUtil;
@@ -24,12 +25,13 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
             Long cinemaHallId = (Long) session.save(cinemaHall);
             transaction.commit();
             cinemaHall.setCinemaHallId(cinemaHallId);
+            LOGGER.info("cinema hall was succeed add to the db");
             return cinemaHall;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can`t insert cinema hall entity", e);
+            throw new DataProcessingException("Can`t insert cinema hall entity", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -47,7 +49,7 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
             criteriaQuery.from(CinemaHall.class);
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Can`t get All cinema hall ", e);
+            throw new DataProcessingException("Can`t get All cinema hall ", e);
         } finally {
             if (session != null) {
                 session.close();

@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import web.cinema.dao.MovieDao;
+import web.cinema.exception.DataProcessingException;
 import web.cinema.lib.Dao;
 import web.cinema.model.Movie;
 import web.cinema.util.HibernateUtil;
@@ -24,12 +25,13 @@ public class MovieDaoImpl implements MovieDao {
             Long movieId = (Long) session.save(movie);
             transaction.commit();
             movie.setMovieId(movieId);
+            LOGGER.info("movie was succeed added to the db");
             return movie;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can`t insert Movie entity", e);
+            throw new DataProcessingException("Can`t insert Movie entity", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -47,7 +49,7 @@ public class MovieDaoImpl implements MovieDao {
             criteriaQuery.from(Movie.class);
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Can`t get All movie ", e);
+            throw new DataProcessingException("Can`t get All movie ", e);
         } finally {
             if (session != null) {
                 session.close();

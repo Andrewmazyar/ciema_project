@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import web.cinema.dao.MovieSessionDao;
+import web.cinema.exception.DataProcessingException;
 import web.cinema.lib.Dao;
 import web.cinema.model.MovieSession;
 import web.cinema.util.HibernateUtil;
@@ -26,12 +27,13 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             Long movieSessionId = (Long) session.save(movieSession);
             transaction.commit();
             movieSession.setMovieSessionId(movieSessionId);
+            LOGGER.info("movie session was succeed added to the db");
             return movieSession;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can`t insert Movie Session entity", e);
+            throw new DataProcessingException("Can`t insert Movie Session entity", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -49,7 +51,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             criteriaQuery.from(MovieSession.class);
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Can`t get All movie sessions", e);
+            throw new DataProcessingException("Can`t get All movie sessions", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -76,7 +78,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Cant get movie session by the date or movie id", e);
+            throw new DataProcessingException("Cant get movie session by the date or movie id", e);
         } finally {
             if (session != null) {
                 session.close();
