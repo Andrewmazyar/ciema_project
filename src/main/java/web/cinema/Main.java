@@ -12,6 +12,7 @@ import web.cinema.security.AuthenticationService;
 import web.cinema.service.CinemaHallService;
 import web.cinema.service.MovieService;
 import web.cinema.service.MovieSessionService;
+import web.cinema.service.UserService;
 
 public class Main {
     private static Injector INJECTOR = Injector.getInstance("web.cinema");
@@ -49,5 +50,7 @@ public class Main {
         AuthenticationService authenticationService
                 = (AuthenticationService) INJECTOR.getInstance(AuthenticationService.class);
         authenticationService.register(hector.getEmail(), hector.getPassword());
+        UserService userService = (UserService) INJECTOR.getInstance(UserService.class);
+        userService.findByEmail("hector@gmail.com");
     }
 }

@@ -4,7 +4,7 @@ import web.cinema.exception.AuthenticationException;
 import web.cinema.model.User;
 
 public interface AuthenticationService {
-    User email(String login, String password) throws AuthenticationException;
+    User login(String login, String password) throws AuthenticationException;
 
     public User register(String email, String password);
 }

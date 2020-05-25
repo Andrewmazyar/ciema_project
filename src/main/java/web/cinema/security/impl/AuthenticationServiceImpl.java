@@ -14,7 +14,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     UserService userService;
 
     @Override
-    public User email(String email, String password) throws AuthenticationException {
+    public User login(String email, String password) throws AuthenticationException {
         User userFromDb = userService.findByEmail(email);
         if (HashUtil.hashPassword(password, userFromDb.getSalt())
                 .equals(userFromDb.getPassword())) {
