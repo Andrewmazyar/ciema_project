@@ -7,9 +7,12 @@ import web.cinema.lib.Injector;
 import web.cinema.model.CinemaHall;
 import web.cinema.model.Movie;
 import web.cinema.model.MovieSession;
+import web.cinema.model.User;
+import web.cinema.security.AuthenticationService;
 import web.cinema.service.CinemaHallService;
 import web.cinema.service.MovieService;
 import web.cinema.service.MovieSessionService;
+import web.cinema.service.UserService;
 
 public class Main {
     private static Injector INJECTOR = Injector.getInstance("web.cinema");
@@ -40,5 +43,14 @@ public class Main {
         movieSessionService.add(movieSession);
         movieSessionService.findAvailableSessions(movie.getMovieId(),
                 LocalDate.parse("2014-04-08")).forEach(System.out::println);
+
+        User hector = new User();
+        hector.setEmail("hector@gmail.com");
+        hector.setPassword("very_secret_password");
+        AuthenticationService authenticationService
+                = (AuthenticationService) INJECTOR.getInstance(AuthenticationService.class);
+        authenticationService.register(hector.getEmail(), hector.getPassword());
+        UserService userService = (UserService) INJECTOR.getInstance(UserService.class);
+        userService.findByEmail("hector@gmail.com");
     }
 }
