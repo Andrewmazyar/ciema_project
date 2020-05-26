@@ -63,8 +63,8 @@ public class Main {
 
         ShoppingCartService shoppingCartService
                 = (ShoppingCartService) INJECTOR.getInstance(ShoppingCartService.class);
-//        ShoppingCart cart = shoppingCartService.getByUser(hector);
-//        System.out.println("CartID: " + cart.getId());
+        ShoppingCart cart = shoppingCartService.getByUser(hector);
+        System.out.println("CartID: " + cart.getId());
         shoppingCartService.addSession(movieSession, userService.findByEmail("hector@gmail.com"));
     }
 }
