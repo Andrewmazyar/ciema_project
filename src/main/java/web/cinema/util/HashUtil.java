@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 import org.apache.log4j.Logger;
 
 public class HashUtil {
+    private static final String ENCRYPTOR = "SHA-512";
     private static Logger logger = Logger.getLogger(HashUtil.class);
 
     public static byte[] getSalt() {
@@ -18,7 +19,7 @@ public class HashUtil {
     public static String hashPassword(String password, byte[] salt) {
         StringBuilder hashPassword = new StringBuilder();
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            MessageDigest messageDigest = MessageDigest.getInstance(ENCRYPTOR);
             messageDigest.update(salt);
             byte[] digest = messageDigest.digest(password.getBytes());
 
@@ -26,7 +27,7 @@ public class HashUtil {
                 hashPassword.append(String.format("%02x", b));
             }
         } catch (NoSuchAlgorithmException e) {
-            logger.error(e);
+            throw new RuntimeException("Can`t hashing password", e);
         }
 
         return hashPassword.toString();

@@ -1,6 +1,7 @@
 package web.cinema.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import web.cinema.dao.UserDao;
 import web.cinema.lib.Inject;
 import web.cinema.lib.Service;
@@ -24,6 +25,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return userDao.findByEmail(email);
+        Optional<User> user = userDao.findByEmail(email);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        return null;
     }
 }
