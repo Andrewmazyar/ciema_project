@@ -21,7 +21,6 @@ public class TicketDaoImpl implements TicketDao {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
             session.save(ticket);
-            session.flush();
             transaction.commit();
             LOGGER.info("ticket was succeed added to the db");
             return ticket;

@@ -47,7 +47,6 @@ public class ShoppingCardDaoImpl implements ShoppingCartDao {
             transaction = session.beginTransaction();
             Query query = session.createQuery("from ShoppingCart c "
                     + "left join fetch c.tickets Ticket "
-                    + "left join fetch c.user User "
                     + "where c.user = :user", ShoppingCart.class);
             query.setParameter("user", user);
             ShoppingCart shoppingCart = (ShoppingCart) query.uniqueResult();
