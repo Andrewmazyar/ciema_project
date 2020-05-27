@@ -3,15 +3,18 @@ package web.cinema;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import web.cinema.exception.AuthenticationException;
 import web.cinema.lib.Injector;
 import web.cinema.model.CinemaHall;
 import web.cinema.model.Movie;
 import web.cinema.model.MovieSession;
+import web.cinema.model.ShoppingCart;
 import web.cinema.model.User;
 import web.cinema.security.AuthenticationService;
 import web.cinema.service.CinemaHallService;
 import web.cinema.service.MovieService;
 import web.cinema.service.MovieSessionService;
+import web.cinema.service.ShoppingCartService;
 import web.cinema.service.UserService;
 
 public class Main {
@@ -52,5 +55,17 @@ public class Main {
         authenticationService.register(hector.getEmail(), hector.getPassword());
         UserService userService = (UserService) INJECTOR.getInstance(UserService.class);
         userService.findByEmail("hector@gmail.com");
+        try {
+            authenticationService.login("hector@gmail.com","very_secret_password");
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+        }
+
+        ShoppingCartService shoppingCartService
+                = (ShoppingCartService) INJECTOR.getInstance(ShoppingCartService.class);
+        ShoppingCart cart = shoppingCartService
+                .getByUser(userService.findByEmail("hector@gmail.com"));
+        System.out.println("CartID: " + cart.getId());
+        shoppingCartService.addSession(movieSession, userService.findByEmail("hector@gmail.com"));
     }
 }

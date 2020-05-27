@@ -1,38 +1,36 @@
 package web.cinema.dao.impl;
 
-import java.util.List;
-import java.util.Optional;
-import javax.persistence.criteria.CriteriaQuery;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import web.cinema.dao.UserDao;
+import web.cinema.dao.ShoppingCartDao;
 import web.cinema.exception.DataProcessingException;
 import web.cinema.lib.Dao;
+import web.cinema.model.ShoppingCart;
 import web.cinema.model.User;
 import web.cinema.util.HibernateUtil;
 
 @Dao
-public class UserDaoImpl implements UserDao {
-    private static final Logger LOGGER = Logger.getLogger(UserDaoImpl.class);
+public class ShoppingCardDaoImpl implements ShoppingCartDao {
+    private static final Logger LOGGER = Logger.getLogger(ShoppingCardDaoImpl.class);
 
     @Override
-    public User add(User user) {
+    public ShoppingCart add(ShoppingCart shoppingCart) {
         Transaction transaction = null;
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            session.save(user);
+            session.save(shoppingCart);
             transaction.commit();
-            LOGGER.info("user was succeed added to the db");
-            return user;
+            LOGGER.info("shopping cart was succeed added to the db");
+            return shoppingCart;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Can`t insert User entity", e);
+            throw new DataProcessingException("Can`t insert shopping cart entity", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -41,16 +39,24 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAll() {
+    public ShoppingCart getByUser(User user) {
+        Transaction transaction = null;
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            CriteriaQuery<User> criteriaQuery = session
-                    .getCriteriaBuilder().createQuery(User.class);
-            criteriaQuery.from(User.class);
-            return session.createQuery(criteriaQuery).getResultList();
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("from ShoppingCart c "
+                    + "left join fetch c.tickets Ticket "
+                    + "where c.user = :user", ShoppingCart.class);
+            query.setParameter("user", user);
+            ShoppingCart shoppingCart = (ShoppingCart) query.uniqueResult();
+            transaction.commit();
+            return shoppingCart;
         } catch (Exception e) {
-            throw new DataProcessingException("Can`t get All users ", e);
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new DataProcessingException("Cant get shopping cart by user", e);
         } finally {
             if (session != null) {
                 session.close();
@@ -59,22 +65,19 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public void update(ShoppingCart shoppingCart) {
         Transaction transaction = null;
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Query query = session.createQuery("from User where email = :email");
-            query.setParameter("email", email);
-            User user = (User) query.uniqueResult();
+            session.update(shoppingCart);
             transaction.commit();
-            return Optional.ofNullable(user);
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Cant get user by email", e);
+            throw new DataProcessingException("Cant update shopping cart by user", e);
         } finally {
             if (session != null) {
                 session.close();
