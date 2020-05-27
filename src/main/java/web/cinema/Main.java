@@ -14,6 +14,7 @@ import web.cinema.security.AuthenticationService;
 import web.cinema.service.CinemaHallService;
 import web.cinema.service.MovieService;
 import web.cinema.service.MovieSessionService;
+import web.cinema.service.OrderService;
 import web.cinema.service.ShoppingCartService;
 import web.cinema.service.UserService;
 
@@ -67,5 +68,9 @@ public class Main {
                 .getByUser(userService.findByEmail("hector@gmail.com"));
         System.out.println("CartID: " + cart.getId());
         shoppingCartService.addSession(movieSession, userService.findByEmail("hector@gmail.com"));
+
+        OrderService orderService = (OrderService) INJECTOR.getInstance(OrderService.class);
+        orderService.completeOrder(cart.getTickets(), userService.findByEmail("hector@gmail.com"));
+        orderService.getOrderHistory(userService.findByEmail("hector@gmail.com"));
     }
 }
