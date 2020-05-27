@@ -15,7 +15,6 @@ public class OrderServiceImpl implements OrderService {
     @Inject
     private OrderDao orderDao;
 
-
     @Override
     public Orders completeOrder(List<Ticket> tickets, User user) {
         Orders order = new Orders();

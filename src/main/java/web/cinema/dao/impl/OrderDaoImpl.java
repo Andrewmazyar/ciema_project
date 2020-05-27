@@ -48,7 +48,7 @@ public class OrderDaoImpl implements OrderDao {
             transaction = session.beginTransaction();
             Query query = session.createQuery("from Orders where user = :user");
             query.setParameter("user", user);
-            List shoppingCart =  query.getResultList();
+            List shoppingCart = query.getResultList();
             transaction.commit();
             return shoppingCart;
         } catch (Exception e) {
