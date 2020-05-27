@@ -1,7 +1,6 @@
 package web.cinema.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import web.cinema.dao.UserDao;
 import web.cinema.lib.Inject;
 import web.cinema.lib.Service;
