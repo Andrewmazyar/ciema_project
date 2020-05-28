@@ -8,7 +8,7 @@ import org.hibernate.query.Query;
 import web.cinema.dao.OrderDao;
 import web.cinema.exception.DataProcessingException;
 import web.cinema.lib.Dao;
-import web.cinema.model.Orders;
+import web.cinema.model.Order;
 import web.cinema.model.User;
 import web.cinema.util.HibernateUtil;
 
@@ -17,7 +17,7 @@ public class OrderDaoImpl implements OrderDao {
     private static final Logger LOGGER = Logger.getLogger(OrderDaoImpl.class);
 
     @Override
-    public Orders add(Orders order) {
+    public Order add(Order order) {
         Transaction transaction = null;
         Session session = null;
         try {
@@ -40,13 +40,13 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Orders> getOrderHistory(User user) {
+    public List<Order> getOrderHistory(User user) {
         Transaction transaction = null;
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
-            Query query = session.createQuery("from Orders where user = :user");
+            Query query = session.createQuery("from Order where user = :user");
             query.setParameter("user", user);
             List shoppingCart = query.getResultList();
             transaction.commit();
