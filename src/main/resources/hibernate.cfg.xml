@@ -16,6 +16,7 @@
         <mapping class="web.cinema.model.CinemaHall"/>
         <mapping class="web.cinema.model.Movie"/>
         <mapping class="web.cinema.model.MovieSession"/>
+        <mapping class="web.cinema.model.Order"/>
         <mapping class="web.cinema.model.ShoppingCart"/>
         <mapping class="web.cinema.model.Ticket"/>
         <mapping class="web.cinema.model.User"/>
