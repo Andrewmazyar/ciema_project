@@ -2,25 +2,30 @@ package web.cinema.dao.impl;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 import web.cinema.dao.ShoppingCartDao;
 import web.cinema.exception.DataProcessingException;
-import web.cinema.lib.Dao;
 import web.cinema.model.ShoppingCart;
 import web.cinema.model.User;
-import web.cinema.util.HibernateUtil;
 
-@Dao
+@Repository
 public class ShoppingCardDaoImpl implements ShoppingCartDao {
     private static final Logger LOGGER = Logger.getLogger(ShoppingCardDaoImpl.class);
+    private final SessionFactory sessionFactory;
+
+    public ShoppingCardDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public ShoppingCart add(ShoppingCart shoppingCart) {
         Transaction transaction = null;
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             session.save(shoppingCart);
             transaction.commit();
@@ -43,7 +48,7 @@ public class ShoppingCardDaoImpl implements ShoppingCartDao {
         Transaction transaction = null;
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             Query query = session.createQuery("from ShoppingCart c "
                     + "left join fetch c.tickets Ticket "
@@ -69,7 +74,7 @@ public class ShoppingCardDaoImpl implements ShoppingCartDao {
         Transaction transaction = null;
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             session.update(shoppingCart);
             transaction.commit();
