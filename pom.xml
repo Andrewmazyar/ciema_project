@@ -50,7 +50,6 @@
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-profile</artifactId>
@@ -164,5 +163,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
 </project>
