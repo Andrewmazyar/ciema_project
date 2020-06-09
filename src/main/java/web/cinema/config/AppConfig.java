@@ -10,12 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import web.cinema.model.CinemaHall;
-import web.cinema.model.MovieSession;
-import web.cinema.model.Order;
-import web.cinema.model.ShoppingCart;
-import web.cinema.model.Ticket;
-import web.cinema.model.User;
 
 @Configuration
 @PropertySource("classpath:db.properties")
