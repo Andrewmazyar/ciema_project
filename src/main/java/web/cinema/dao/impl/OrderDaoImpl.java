@@ -3,25 +3,30 @@ package web.cinema.dao.impl;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 import web.cinema.dao.OrderDao;
 import web.cinema.exception.DataProcessingException;
-import web.cinema.lib.Dao;
 import web.cinema.model.Order;
 import web.cinema.model.User;
-import web.cinema.util.HibernateUtil;
 
-@Dao
+@Repository
 public class OrderDaoImpl implements OrderDao {
     private static final Logger LOGGER = Logger.getLogger(OrderDaoImpl.class);
+    private final SessionFactory sessionFactory;
+
+    public OrderDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Order add(Order order) {
         Transaction transaction = null;
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             session.save(order);
             transaction.commit();
@@ -44,7 +49,7 @@ public class OrderDaoImpl implements OrderDao {
         Transaction transaction = null;
         Session session = null;
         try {
-            session = HibernateUtil.getSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             Query query = session.createQuery("from Order where user = :user");
             query.setParameter("user", user);
