@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import web.cinema.model.Order;
 import web.cinema.model.Ticket;
-import web.cinema.model.dto.OrderRequestDto;
+import web.cinema.model.User;
 import web.cinema.model.dto.OrderResponseDto;
 import web.cinema.model.dto.TicketDto;
 import web.cinema.service.MovieSessionService;
 import web.cinema.service.OrderService;
+import web.cinema.service.ShoppingCartService;
 import web.cinema.service.UserService;
 
 @RestController
@@ -24,22 +25,24 @@ public class OrderController {
     private final OrderService orderService;
     private final UserService userService;
     private final MovieSessionService movieSessionService;
+    private final ShoppingCartService shoppingCartService;
 
     public OrderController(OrderService orderService,
                            UserService userService,
-                           MovieSessionService movieSessionService) {
+                           MovieSessionService movieSessionService,
+                           ShoppingCartService shoppingCartService) {
         this.orderService = orderService;
         this.userService = userService;
         this.movieSessionService = movieSessionService;
+        this.shoppingCartService = shoppingCartService;
     }
 
     @PostMapping("/complete")
-    public void complete(@RequestBody OrderRequestDto orderRequestDto) {
-        orderService.completeOrder(orderRequestDto.getTickets()
-                        .stream()
-                        .map(this::dtoToTicket)
-                        .collect(Collectors.toList()),
-                userService.findByEmail(orderRequestDto.getUserEmail()));
+    public void complete(@RequestBody Long userId) {
+        User user = userService.getById(userId);
+        orderService.completeOrder(shoppingCartService
+                .getByUser(user)
+                .getTickets(), user);
     }
 
     @GetMapping
@@ -68,13 +71,5 @@ public class OrderController {
         dto.setUserEmail(ticket.getUser().getEmail());
         dto.setMovieSessionId(ticket.getMovieSession().getMovieSessionId());
         return dto;
-    }
-
-    private Ticket dtoToTicket(TicketDto ticketDto) {
-        Ticket ticket = new Ticket();
-        ticket.setUser(userService.findByEmail(ticketDto.getUserEmail()));
-        ticket.setMovieSession(movieSessionService
-                .getById(ticketDto.getMovieSessionId()));
-        return ticket;
     }
 }
