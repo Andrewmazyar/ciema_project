@@ -84,4 +84,28 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             }
         }
     }
+
+    @Override
+    public MovieSession getById(Long id) {
+        Transaction transaction = null;
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            Query query = session
+                    .createQuery("from MovieSession where movieSessionId = :id");
+            query.setParameter("id", id);
+            transaction.commit();
+            return (MovieSession) query.getSingleResult();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new DataProcessingException("Cant get movie session by id", e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
 }

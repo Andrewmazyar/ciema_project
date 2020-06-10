@@ -14,7 +14,8 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 @PropertySource("classpath:db.properties")
 @ComponentScan(basePackages = {
         "web.cinema.service",
-        "web.cinema.dao"
+        "web.cinema.dao",
+        "web.cinema.security"
 })
 public class AppConfig {
     private final Environment environment;
@@ -43,7 +44,7 @@ public class AppConfig {
         properties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
 
         factoryBean.setHibernateProperties(properties);
-        factoryBean.setAnnotatedPackages("web.cinema.model");
+        factoryBean.setPackagesToScan("web.cinema.model");
         return factoryBean;
     }
 }

@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import web.cinema.dao.MovieDao;
 import web.cinema.exception.DataProcessingException;
@@ -53,6 +54,20 @@ public class MovieDaoImpl implements MovieDao {
             return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
             throw new DataProcessingException("Can`t get All movie ", e);
+        }
+    }
+
+    @Override
+    public Movie getById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+
+            Query query = session.createQuery("from Movie "
+                    + "where movieId = :id", Movie.class);
+            query.setParameter("id", id);
+            Movie movie = (Movie) query.uniqueResult();
+            return movie;
+        } catch (Exception e) {
+            throw new DataProcessingException("Can`t get movie by id ", e);
         }
     }
 }

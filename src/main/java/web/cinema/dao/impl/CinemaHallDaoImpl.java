@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import web.cinema.dao.CinemaHallDao;
 import web.cinema.exception.DataProcessingException;
@@ -59,6 +60,19 @@ public class CinemaHallDaoImpl implements CinemaHallDao {
             if (session != null) {
                 session.close();
             }
+        }
+    }
+
+    @Override
+    public CinemaHall getById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            Query query = session.createQuery("from CinemaHall "
+                    + "where cinemaHallId = :id", CinemaHall.class);
+            query.setParameter("id", id);
+            CinemaHall cinemaHall = (CinemaHall) query.uniqueResult();
+            return cinemaHall;
+        } catch (Exception e) {
+            throw new DataProcessingException("Can`t get Cinema Hall by id ", e);
         }
     }
 }
