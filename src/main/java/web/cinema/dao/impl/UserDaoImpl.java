@@ -92,25 +92,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getById(Long id) {
-        Transaction transaction = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            Query query = session.createQuery("from User where id = :id");
-            query.setParameter("id", id);
-            User user = (User) query.uniqueResult();
-            transaction.commit();
-            return user;
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(User.class, id);
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             throw new DataProcessingException("Cant get user by email", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 }

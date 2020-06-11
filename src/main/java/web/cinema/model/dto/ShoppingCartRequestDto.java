@@ -9,7 +9,7 @@ public class ShoppingCartRequestDto {
     }
 
     public void setMovieSessionId(Long movieSessionId) {
-        movieSessionId = movieSessionId;
+        this.movieSessionId = movieSessionId;
     }
 
     public Long getUserId() {
@@ -17,6 +17,6 @@ public class ShoppingCartRequestDto {
     }
 
     public void setUserId(Long userId) {
-        userId = userId;
+        this.userId = userId;
     }
 }
