@@ -49,6 +49,5 @@ public class OrderController {
                 .stream()
                 .map(orderMapper::convertOrderToDto)
                 .collect(Collectors.toList());
-
     }
 }
