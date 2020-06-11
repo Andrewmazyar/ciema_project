@@ -14,16 +14,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final ShoppingCartService shoppingCartService;
 
+    private final HashUtil hashUtil;
+
     public AuthenticationServiceImpl(UserService userService,
-                                     ShoppingCartService shoppingCartService) {
+                                     ShoppingCartService shoppingCartService,
+                                     HashUtil hashUtil) {
         this.userService = userService;
         this.shoppingCartService = shoppingCartService;
+        this.hashUtil = hashUtil;
     }
 
     @Override
     public User login(String email, String password) throws AuthenticationException {
         User userFromDb = userService.findByEmail(email);
-        if (HashUtil.hashPassword(password, userFromDb.getSalt())
+        if (hashUtil.hashPassword(password, userFromDb.getSalt())
                 .equals(userFromDb.getPassword())) {
             return userFromDb;
         }
@@ -33,10 +37,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User register(String email, String password) {
         User user = new User();
-        byte[] salt = HashUtil.getSalt();
+        byte[] salt = hashUtil.getSalt();
         user.setEmail(email);
         user.setSalt(salt);
-        user.setPassword(HashUtil.hashPassword(password, salt));
+        user.setPassword(hashUtil.hashPassword(password, salt));
         userService.add(user);
         shoppingCartService.registerNewShoppingCart(user);
         return user;
