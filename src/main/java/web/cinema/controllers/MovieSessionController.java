@@ -1,7 +1,6 @@
 package web.cinema.controllers;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,11 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import web.cinema.controllers.mappers.MovieSessionMapper;
-import web.cinema.model.MovieSession;
 import web.cinema.model.dto.MovieSessionRequestDto;
 import web.cinema.model.dto.MovieSessionResponseDto;
-import web.cinema.service.CinemaHallService;
-import web.cinema.service.MovieService;
 import web.cinema.service.MovieSessionService;
 
 @RestController
@@ -24,32 +20,17 @@ import web.cinema.service.MovieSessionService;
 public class MovieSessionController {
 
     private final MovieSessionService movieSessionService;
-    private final MovieService movieService;
-    private final CinemaHallService cinemaHallService;
     private final MovieSessionMapper movieSessionMapper;
 
     public MovieSessionController(MovieSessionService movieSessionService,
-                                  MovieService movieService,
-                                  CinemaHallService cinemaHallService,
                                   MovieSessionMapper movieSessionMapper) {
         this.movieSessionService = movieSessionService;
-        this.movieService = movieService;
-        this.cinemaHallService = cinemaHallService;
         this.movieSessionMapper = movieSessionMapper;
     }
 
     @PostMapping
     public void add(@RequestBody MovieSessionRequestDto movieSessionRequestDto) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        MovieSession movieSession = new MovieSession();
-        movieSession.setMovie(
-                movieService.getById(movieSessionRequestDto.getMovieId()));
-        movieSession.setCinemaHall(
-                cinemaHallService.getById(movieSessionRequestDto.getCinemaHallId()));
-        movieSession.setShowTime(
-                LocalDateTime.parse(movieSessionRequestDto.getMovieSessionTime(),
-                        formatter));
-        movieSessionService.add(movieSession);
+        movieSessionMapper.convertToMovieSession(movieSessionRequestDto);
     }
 
     @GetMapping("/available")

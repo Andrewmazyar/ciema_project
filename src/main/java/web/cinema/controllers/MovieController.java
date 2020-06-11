@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import web.cinema.controllers.mappers.MovieMapper;
+import web.cinema.model.CinemaHall;
 import web.cinema.model.Movie;
+import web.cinema.model.dto.CinemaHallRequestDto;
 import web.cinema.model.dto.MovieRequestDto;
 import web.cinema.model.dto.MovieResponseDto;
 import web.cinema.service.MovieService;
@@ -35,9 +37,6 @@ public class MovieController {
 
     @PostMapping
     public void add(@RequestBody MovieRequestDto movieRequestDto) {
-        Movie movie = new Movie();
-        movie.setDescription(movieRequestDto.getMovieDescription());
-        movie.setTitle(movieRequestDto.getMovieTitle());
-        movieService.add(movie);
+        movieMapper.convertToMovie(movieRequestDto);
     }
 }

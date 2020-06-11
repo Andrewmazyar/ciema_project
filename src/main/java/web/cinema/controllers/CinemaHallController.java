@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import web.cinema.controllers.mappers.CinemaHallMapper;
-import web.cinema.model.CinemaHall;
 import web.cinema.model.dto.CinemaHallRequestDto;
 import web.cinema.model.dto.CinemaHallResponseDto;
 import web.cinema.service.CinemaHallService;
@@ -35,9 +34,6 @@ public class CinemaHallController {
 
     @PostMapping
     public void add(@RequestBody CinemaHallRequestDto cinemaHallRequestDto) {
-        CinemaHall cinemaHall = new CinemaHall();
-        cinemaHall.setCapacity(cinemaHallRequestDto.getCapacity());
-        cinemaHall.setDescription(cinemaHallRequestDto.getDescription());
-        cinemaHallService.add(cinemaHall);
+        cinemaHallMapper.convertToCinemaHall(cinemaHallRequestDto);
     }
 }
