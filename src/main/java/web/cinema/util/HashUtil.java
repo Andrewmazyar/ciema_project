@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HashUtil {
-    private final String ENCRYPTOR = "SHA-512";
+    private final String encryptor = "SHA-512";
     private Logger logger = Logger.getLogger(HashUtil.class);
 
     public byte[] getSalt() {
@@ -21,7 +21,7 @@ public class HashUtil {
     public String hashPassword(String password, byte[] salt) {
         StringBuilder hashPassword = new StringBuilder();
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance(ENCRYPTOR);
+            MessageDigest messageDigest = MessageDigest.getInstance(encryptor);
             messageDigest.update(salt);
             byte[] digest = messageDigest.digest(password.getBytes());
 
