@@ -1,6 +1,5 @@
 package web.cinema.model.dto;
 
-
 public class MovieSessionResponseDto {
     private String title;
     private Long cinemaHallId;
