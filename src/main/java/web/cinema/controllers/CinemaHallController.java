@@ -6,26 +6,30 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import web.cinema.controllers.mappers.CinemaHallMapper;
 import web.cinema.model.CinemaHall;
 import web.cinema.model.dto.CinemaHallRequestDto;
 import web.cinema.model.dto.CinemaHallResponseDto;
 import web.cinema.service.CinemaHallService;
 
 @RestController
-@RequestMapping("/cinemahalls")
+@RequestMapping("/cinema-halls")
 public class CinemaHallController {
 
     private final CinemaHallService cinemaHallService;
+    private final CinemaHallMapper cinemaHallMapper;
 
-    public CinemaHallController(CinemaHallService cinemaHallService) {
+    public CinemaHallController(CinemaHallService cinemaHallService,
+                                CinemaHallMapper cinemaHallMapper) {
         this.cinemaHallService = cinemaHallService;
+        this.cinemaHallMapper = cinemaHallMapper;
     }
 
     @RequestMapping
     public List<CinemaHallResponseDto> getAll() {
         return cinemaHallService.getAll()
                 .stream()
-                .map(this::convertCinemaHallToDto)
+                .map(cinemaHallMapper::convertCinemaHallToDto)
                 .collect(Collectors.toList());
     }
 
@@ -35,13 +39,5 @@ public class CinemaHallController {
         cinemaHall.setCapacity(cinemaHallRequestDto.getCapacity());
         cinemaHall.setDescription(cinemaHallRequestDto.getDescription());
         cinemaHallService.add(cinemaHall);
-    }
-
-    private CinemaHallResponseDto convertCinemaHallToDto(CinemaHall cinemaHall) {
-        CinemaHallResponseDto dto = new CinemaHallResponseDto();
-        dto.setCinemaHallCapacity(cinemaHall.getCapacity());
-        dto.setCinemaHallDescription(cinemaHall.getDescription());
-        dto.setCinemaHallId(cinemaHall.getCinemaHallId());
-        return dto;
     }
 }

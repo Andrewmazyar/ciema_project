@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import web.cinema.controllers.mappers.MovieMapper;
 import web.cinema.model.Movie;
 import web.cinema.model.dto.MovieRequestDto;
 import web.cinema.model.dto.MovieResponseDto;
@@ -16,16 +17,19 @@ import web.cinema.service.MovieService;
 public class MovieController {
 
     private final MovieService movieService;
+    private final MovieMapper movieMapper;
 
-    public MovieController(MovieService movieService) {
+    public MovieController(MovieService movieService,
+                           MovieMapper movieMapper) {
         this.movieService = movieService;
+        this.movieMapper = movieMapper;
     }
 
     @RequestMapping
     public List<MovieResponseDto> getAll() {
         return movieService.getAll()
                 .stream()
-                .map(this::convertToMovieDto)
+                .map(movieMapper::convertToMovieDto)
                 .collect(Collectors.toList());
     }
 
@@ -35,13 +39,5 @@ public class MovieController {
         movie.setDescription(movieRequestDto.getMovieDescription());
         movie.setTitle(movieRequestDto.getMovieTitle());
         movieService.add(movie);
-    }
-
-    private MovieResponseDto convertToMovieDto(Movie movie) {
-        MovieResponseDto dto = new MovieResponseDto();
-        dto.setMovieDescription(movie.getDescription());
-        dto.setMovieId(movie.getMovieId());
-        dto.setMovieTitle(movie.getTitle());
-        return dto;
     }
 }

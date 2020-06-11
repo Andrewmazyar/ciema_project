@@ -46,25 +46,13 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Order> getOrderHistory(User user) {
-        Transaction transaction = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
+        try (Session session = sessionFactory.openSession()) {
             Query query = session.createQuery("from Order where user = :user");
             query.setParameter("user", user);
             List shoppingCart = query.getResultList();
-            transaction.commit();
             return shoppingCart;
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             throw new DataProcessingException("Cant get shopping cart by user", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 }

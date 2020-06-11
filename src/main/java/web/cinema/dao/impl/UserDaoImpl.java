@@ -68,25 +68,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        Transaction transaction = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
-            transaction = session.beginTransaction();
+        try (Session session = sessionFactory.openSession()) {
             Query query = session.createQuery("from User where email = :email");
             query.setParameter("email", email);
             User user = (User) query.uniqueResult();
-            transaction.commit();
             return Optional.ofNullable(user);
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             throw new DataProcessingException("Cant get user by email", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
         }
     }
 

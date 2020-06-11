@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import web.cinema.controllers.mappers.MovieSessionMapper;
 import web.cinema.model.MovieSession;
 import web.cinema.model.dto.MovieSessionRequestDto;
 import web.cinema.model.dto.MovieSessionResponseDto;
@@ -25,13 +26,16 @@ public class MovieSessionController {
     private final MovieSessionService movieSessionService;
     private final MovieService movieService;
     private final CinemaHallService cinemaHallService;
+    private final MovieSessionMapper movieSessionMapper;
 
     public MovieSessionController(MovieSessionService movieSessionService,
                                   MovieService movieService,
-                                  CinemaHallService cinemaHallService) {
+                                  CinemaHallService cinemaHallService,
+                                  MovieSessionMapper movieSessionMapper) {
         this.movieSessionService = movieSessionService;
         this.movieService = movieService;
         this.cinemaHallService = cinemaHallService;
+        this.movieSessionMapper = movieSessionMapper;
     }
 
     @PostMapping
@@ -55,16 +59,7 @@ public class MovieSessionController {
         return movieSessionService.findAvailableSessions(movieId,
                 LocalDate.parse(date, formatter))
                 .stream()
-                .map(this::convertMovieSessionToDto)
+                .map(movieSessionMapper::convertMovieSessionToDto)
                 .collect(Collectors.toList());
     }
-
-    private MovieSessionResponseDto convertMovieSessionToDto(MovieSession movieSession) {
-        MovieSessionResponseDto dto = new MovieSessionResponseDto();
-        dto.setCinemaHallId(movieSession.getCinemaHall().getCinemaHallId());
-        dto.setTitle(movieSession.getMovie().getTitle());
-        dto.setShowTime(movieSession.getShowTime().toString());
-        return dto;
-    }
-
 }
