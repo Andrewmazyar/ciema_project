@@ -37,10 +37,9 @@ public class MovieSessionController {
     @PostMapping
     public void add(@RequestBody MovieSessionRequestDto movieSessionRequestDto) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
         MovieSession movieSession = new MovieSession();
         movieSession.setMovie(
-                movieService.getById(movieSessionRequestDto.getMovieSessionId()));
+                movieService.getById(movieSessionRequestDto.getMovieId()));
         movieSession.setCinemaHall(
                 cinemaHallService.getById(movieSessionRequestDto.getCinemaHallId()));
         movieSession.setShowTime(
@@ -64,7 +63,7 @@ public class MovieSessionController {
         MovieSessionResponseDto dto = new MovieSessionResponseDto();
         dto.setCinemaHallId(movieSession.getCinemaHall().getCinemaHallId());
         dto.setTitle(movieSession.getMovie().getTitle());
-        dto.setShowTime(movieSession.getShowTime());
+        dto.setShowTime(movieSession.getShowTime().toString());
         return dto;
     }
 
