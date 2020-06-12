@@ -55,4 +55,13 @@ public class MovieDaoImpl implements MovieDao {
             throw new DataProcessingException("Can`t get All movie ", e);
         }
     }
+
+    @Override
+    public Movie getById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(Movie.class, id);
+        } catch (Exception e) {
+            throw new DataProcessingException("Can`t get movie by id ", e);
+        }
+    }
 }

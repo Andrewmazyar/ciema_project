@@ -47,37 +47,43 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAll() {
-        try (Session session = sessionFactory.openSession()) {
-            CriteriaQuery<User> criteriaQuery = session
-                    .getCriteriaBuilder().createQuery(User.class);
-            criteriaQuery.from(User.class);
-            return session.createQuery(criteriaQuery).getResultList();
-        } catch (Exception e) {
-            throw new DataProcessingException("Can`t get All users ", e);
-        }
-    }
-
-    @Override
-    public Optional<User> findByEmail(String email) {
         Transaction transaction = null;
         Session session = null;
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            Query query = session.createQuery("from User where email = :email");
-            query.setParameter("email", email);
-            User user = (User) query.uniqueResult();
+            CriteriaQuery<User> criteriaQuery = session
+                    .getCriteriaBuilder().createQuery(User.class);
+            criteriaQuery.from(User.class);
             transaction.commit();
-            return Optional.ofNullable(user);
+            return session.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new DataProcessingException("Cant get user by email", e);
+            throw new DataProcessingException("Can`t get All users ", e);
         } finally {
             if (session != null) {
                 session.close();
             }
+        }
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        try (Session session = sessionFactory.openSession()) {
+            Query query = session.createQuery("from User where email = :email");
+            query.setParameter("email", email);
+            User user = (User) query.uniqueResult();
+            return Optional.ofNullable(user);
+        } catch (Exception e) {
+            throw new DataProcessingException("Cant get user by email", e);
+        }
+    }
+
+    @Override
+    public User getById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(User.class, id);
+        } catch (Exception e) {
+            throw new DataProcessingException("Cant get user by email", e);
         }
     }
 }
