@@ -2,6 +2,7 @@ package web.cinema.controllers;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class MovieController {
     }
 
     @PostMapping
-    public void add(@RequestBody MovieRequestDto movieRequestDto) {
+    public void add(@RequestBody @Valid MovieRequestDto movieRequestDto) {
         movieMapper.convertToMovie(movieRequestDto);
     }
 }

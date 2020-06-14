@@ -1,5 +1,6 @@
 package web.cinema.controllers;
 
+import javax.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,7 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/add-movie-session")
-    public void addMovieSession(@RequestBody ShoppingCartRequestDto scrd,
+    public void addMovieSession(@RequestBody @Valid ShoppingCartRequestDto scrd,
                                 Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         shoppingCartService.addSession(movieSessionService.getById(scrd.getMovieSessionId()),
