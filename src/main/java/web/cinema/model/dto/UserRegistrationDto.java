@@ -5,14 +5,13 @@ import javax.validation.constraints.Size;
 import web.cinema.validation.EmailConstraint;
 import web.cinema.validation.PasswordConstraint;
 
+@PasswordConstraint
 public class UserRegistrationDto {
     @NotNull
     @Size(min = 6)
     @EmailConstraint
     private String email;
-    @PasswordConstraint
     private String password;
-    @PasswordConstraint
     private String repeatPassword;
 
     public String getEmail() {
