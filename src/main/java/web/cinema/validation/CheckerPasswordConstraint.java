@@ -11,7 +11,7 @@ import javax.validation.Payload;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CheckerPasswordConstraint {
-    String message() default "Invalid password";
+    String message() default "'password' and 'repeat password' don't match";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
