@@ -2,6 +2,7 @@ package web.cinema.controllers;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping("/by-email")
-    public UserResponseDto get(@RequestParam String email) {
+    public UserResponseDto get(@RequestParam @Valid String email) {
         return userMapper.convertUserToDto(userService.findByEmail(email));
     }
 
