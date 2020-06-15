@@ -4,7 +4,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import web.cinema.model.dto.UserRegistrationDto;
 
-public class PasswordValidator implements ConstraintValidator<PasswordConstraint,
+public class PasswordValidatorForSimilarity implements ConstraintValidator<PasswordConstraint,
         UserRegistrationDto> {
 
     @Override
