@@ -2,8 +2,8 @@ package web.cinema.model.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import web.cinema.validation.EmailConstraint;
 import web.cinema.validation.CheckerPasswordConstraint;
+import web.cinema.validation.EmailConstraint;
 
 @CheckerPasswordConstraint
 public class UserRegistrationDto {
