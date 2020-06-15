@@ -7,10 +7,10 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Constraint(validatedBy = PasswordValidatorForSimilarity.class)
+@Constraint(validatedBy = CheckerPasswordValidator.class)
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PasswordConstraint {
+public @interface CheckerPasswordConstraint {
     String message() default "Invalid password";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
