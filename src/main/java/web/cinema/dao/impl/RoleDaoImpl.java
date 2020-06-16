@@ -45,11 +45,11 @@ public class RoleDaoImpl implements RoleDao {
     @Override
     public Role getRoleByName(String roleName) {
         try (Session session = sessionFactory.openSession()) {
-            Query query = session.createQuery("from Role where roleName = :roleName");
+            Query<Role> query = session.createQuery("from Role where roleName = :roleName");
             query.setParameter("roleName", roleName);
             return (Role) query.uniqueResult();
         } catch (Exception e) {
-            throw new DataProcessingException("Cant get user by email", e);
+            throw new DataProcessingException("Cant get role by name", e);
         }
     }
 }

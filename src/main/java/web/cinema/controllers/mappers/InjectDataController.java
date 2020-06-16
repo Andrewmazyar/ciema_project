@@ -1,21 +1,26 @@
-package web.cinema.controllers;
+package web.cinema.controllers.mappers;
 
 import java.util.Set;
 import javax.annotation.PostConstruct;
+import org.apache.log4j.Logger;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
 import web.cinema.model.Role;
 import web.cinema.model.User;
 import web.cinema.service.RoleService;
 import web.cinema.service.UserService;
 
-public class InjectDataRolesAndUser {
+@Controller
+public class InjectDataController {
+    private static final Logger LOGGER = Logger.getLogger(InjectDataController.class);
+
     private final UserService userService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-    public InjectDataRolesAndUser(UserService userService,
-                                  RoleService roleService,
-                                  PasswordEncoder passwordEncoder) {
+    public InjectDataController(UserService userService,
+                                RoleService roleService,
+                                PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
@@ -34,6 +39,6 @@ public class InjectDataRolesAndUser {
         admin.setRoles(Set.of(roleService.getRoleByName("ADMIN"),
                 roleService.getRoleByName("USER")));
         userService.add(admin);
-
+        LOGGER.info("ADMIN was successfully add to the db");
     }
 }
