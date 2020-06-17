@@ -1,4 +1,4 @@
-package web.cinema.controllers.mappers;
+package web.cinema.controllers;
 
 import java.util.Set;
 import javax.annotation.PostConstruct;
@@ -33,12 +33,12 @@ public class InjectDataController {
         roleService.add(adminRole);
         Role userRole = new Role();
         userRole.setRoleName((Role.RoleName.USER));
+        roleService.add(userRole);
         User admin = new User();
         admin.setEmail("hector@gmail.com");
         admin.setPassword(passwordEncoder.encode("password"));
-        admin.setRoles(Set.of(roleService.getRoleByName("ADMIN"),
-                roleService.getRoleByName("USER")));
+        admin.setRoles(Set.of(roleService.getRoleByName("ADMIN")));
         userService.add(admin);
-        LOGGER.info("ADMIN was successfully add to the db");
+        LOGGER.info("ADMIN was successfully added to the db");
     }
 }
