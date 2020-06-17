@@ -25,8 +25,7 @@ public class CustomeUserDetailService implements UserDetailsService {
             userBuilder.password(user.getPassword());
             userBuilder.roles(user.getRoles()
                     .stream()
-                    .map(Role::getRoleName)
-                    .map(Enum::name)
+                    .map(role -> role.getRoleName().name())
                     .toArray(String[]::new));
         } else {
             throw new UsernameNotFoundException("No such User");
