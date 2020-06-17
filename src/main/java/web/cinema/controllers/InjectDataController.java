@@ -37,7 +37,8 @@ public class InjectDataController {
         User admin = new User();
         admin.setEmail("hector@gmail.com");
         admin.setPassword(passwordEncoder.encode("password"));
-        admin.setRoles(Set.of(roleService.getRoleByName("ADMIN")));
+        admin.setRoles(Set.of(roleService.getRoleByName("ADMIN"),
+                roleService.getRoleByName("USER")));
         userService.add(admin);
         LOGGER.info("ADMIN was successfully added to the db");
     }
