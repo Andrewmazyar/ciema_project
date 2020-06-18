@@ -1,34 +1,37 @@
 package web.cinema.security.impl;
 
+import java.util.Set;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import web.cinema.exception.AuthenticationException;
+import web.cinema.model.Role;
 import web.cinema.model.User;
 import web.cinema.security.AuthenticationService;
+import web.cinema.service.RoleService;
 import web.cinema.service.ShoppingCartService;
 import web.cinema.service.UserService;
-import web.cinema.util.HashUtil;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserService userService;
-
     private final ShoppingCartService shoppingCartService;
-
-    private final HashUtil hashUtil;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
     public AuthenticationServiceImpl(UserService userService,
                                      ShoppingCartService shoppingCartService,
-                                     HashUtil hashUtil) {
+                                     PasswordEncoder passwordEncoder,
+                                     RoleService roleService) {
         this.userService = userService;
         this.shoppingCartService = shoppingCartService;
-        this.hashUtil = hashUtil;
+        this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
     }
 
     @Override
     public User login(String email, String password) throws AuthenticationException {
         User userFromDb = userService.findByEmail(email);
-        if (hashUtil.hashPassword(password, userFromDb.getSalt())
-                .equals(userFromDb.getPassword())) {
+        if (passwordEncoder.matches(password, userFromDb.getPassword())) {
             return userFromDb;
         }
         throw new AuthenticationException("Incorrect password or email");
@@ -37,10 +40,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User register(String email, String password) {
         User user = new User();
-        byte[] salt = hashUtil.getSalt();
         user.setEmail(email);
-        user.setSalt(salt);
-        user.setPassword(hashUtil.hashPassword(password, salt));
+        user.setPassword(passwordEncoder.encode(password));
+        Role role = roleService.getRoleByName("USER");
+        user.setRoles(Set.of(role));
         userService.add(user);
         shoppingCartService.registerNewShoppingCart(user);
         return user;
