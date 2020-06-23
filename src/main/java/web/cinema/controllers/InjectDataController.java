@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import web.cinema.model.Role;
 import web.cinema.model.User;
 import web.cinema.service.RoleService;
+import web.cinema.service.ShoppingCartService;
 import web.cinema.service.UserService;
 
 @Controller
@@ -17,13 +18,16 @@ public class InjectDataController {
     private final UserService userService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final ShoppingCartService shoppingCartService;
 
     public InjectDataController(UserService userService,
                                 RoleService roleService,
-                                PasswordEncoder passwordEncoder) {
+                                PasswordEncoder passwordEncoder,
+                                ShoppingCartService shoppingCartService) {
         this.userService = userService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.shoppingCartService = shoppingCartService;
     }
 
     @PostConstruct
@@ -40,6 +44,7 @@ public class InjectDataController {
         admin.setRoles(Set.of(roleService.getRoleByName("ADMIN"),
                 roleService.getRoleByName("USER")));
         userService.add(admin);
+        shoppingCartService.registerNewShoppingCart(admin);
         LOGGER.info("ADMIN was successfully added to the db");
     }
 }
