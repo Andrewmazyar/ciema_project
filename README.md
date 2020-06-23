@@ -43,8 +43,8 @@ _Launch guide:_
 5. Change a path at **/ciema_project/src/main/resources/log4j2.xml** on line 7. It has to reach your logFile.
 6. Run the project.
 7. After you launch this project: 
-    * By default, there is one user with the USER role (email = "hector@cinema.net", password = "user1") 
-and one with an ADMIN role (login = "admin@gmail.com", password = "password"). You can change these at **/ciema_project/src/main/java/web/cinema/controllers/InjectDataController
+    * By default, there is one user with the USER and ADMIN role (email = "hector@cinema.net", password = "password") 
+     You can change these at **/ciema_project/src/main/java/web/cinema/controllers/InjectDataController
 
 <hr>
 
