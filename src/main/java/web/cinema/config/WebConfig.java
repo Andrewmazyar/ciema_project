@@ -13,13 +13,4 @@ import org.springframework.web.servlet.view.JstlView;
         "web.cinema.controllers"
 })
 public class WebConfig {
-
-    @Bean
-    public InternalResourceViewResolver getResolver() {
-        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setViewClass(JstlView.class);
-        resolver.setPrefix("/WEB-INF/views/");
-        resolver.setSuffix(".jsp");
-        return resolver;
-    }
 }
