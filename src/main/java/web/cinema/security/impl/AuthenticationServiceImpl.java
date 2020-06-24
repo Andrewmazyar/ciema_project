@@ -3,7 +3,6 @@ package web.cinema.security.impl;
 import java.util.Set;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import web.cinema.exception.AuthenticationException;
 import web.cinema.model.Role;
 import web.cinema.model.User;
 import web.cinema.security.AuthenticationService;
@@ -26,15 +25,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.shoppingCartService = shoppingCartService;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
-    }
-
-    @Override
-    public User login(String email, String password) throws AuthenticationException {
-        User userFromDb = userService.findByEmail(email);
-        if (passwordEncoder.matches(password, userFromDb.getPassword())) {
-            return userFromDb;
-        }
-        throw new AuthenticationException("Incorrect password or email");
     }
 
     @Override
